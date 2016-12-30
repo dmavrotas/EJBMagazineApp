@@ -154,35 +154,72 @@ public class CatalogSessionBeanFacade implements CatalogSessionBeanFacadeRemote 
     public void createTestData() {
     	Catalog catalog = new Catalog();
     	
-    	if(catalog != null) {
-    		catalog.setId(1);
-    		catalog.setJournal("Oracle Magazine");
-    		
-    		EJBTest.persist(catalog);
-    		EJBTest.flush();
-    	}
+		catalog.setId(1);
+		catalog.setJournal("Oracle Magazine");
+		
+		EJBTest.persist(catalog);
+		EJBTest.flush();
     	
     	Edition edition = new Edition();
     	
-    	if(edition != null) {
-    		edition.setId(1);
-    		edition.setEdition("January/February 2009");
-    		
-    		EJBTest.persist(edition);
-    		
-    		EJBTest.flush();
-    		EJBTest.merge(catalog);
-    		
-    		catalog.addEdition(edition);
-    	}
+		edition.setId(1);
+		edition.setEdition("January/February 2009");
+		
+		EJBTest.persist(edition);
+		
+		EJBTest.flush();
+		EJBTest.merge(catalog);
+		
+		catalog.addEdition(edition);
     	
     	Section features = new Section();
     	
     	features.setSectionname("FEATURES");
+    	features.setId("1");
     	
     	EJBTest.persist(features);
     	EJBTest.merge(edition);
     	
     	edition.setSection(features);
+    	
+    	Article article = new Article();
+    	
+    	article.setId(1);
+    	article.setTitle("Launching Performance");
+    	
+    	List<Section> featuresList = new ArrayList<Section>();
+    	featuresList.add(features);
+    	
+    	article.setSections(featuresList);
+    	
+    	EJBTest.persist(article);
+    	EJBTest.merge(features);
+    	
+    	features.setArticle(article);
+    	
+    	EJBTest.flush();
+    	
+    	Section technology = new Section();
+    	
+    	technology.setId("1");
+    	technology.setSectionname("Techology");
+    	
+    	EJBTest.persist(technology);
+    	EJBTest.merge(edition);
+    	
+    	edition.setSection(technology);
+    	
+    	article = new Article();
+    	
+    	article.setId(2);
+    	article.setSections(featuresList);
+    	article.setTitle("On Dynamic Sampling");
+    	
+    	EJBTest.persist(article);
+    	EJBTest.merge(technology);
+    	
+    	technology.setArticle(article);
+    	
+    	EJBTest.flush();
     }
 }
